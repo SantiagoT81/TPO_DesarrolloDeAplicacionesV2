@@ -19,6 +19,9 @@
         android:id="@+id/editTextTextEmailAddress2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="24sp"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeTextType="uniform"
         android:autofillHints="Correo"
         android:backgroundTint="@color/underline_gray"
         android:hint="@string/email"
@@ -26,20 +29,16 @@
         android:textColorHint="@color/gray"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
-    app:layout_constraintEnd_toStartOf="@+id/guideline5"
-    app:layout_constraintStart_toStartOf="@+id/guideline4"
-    app:layout_constraintTop_toBottomOf="@+id/guideline7"
-    android:autoSizeTextType="uniform"
-    android:autoSizeMinTextSize="1sp"
-    android:autoSizeMaxTextSize="24sp"
-    />
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/guideline7" />
 
 
     <EditText
-        android:autofillHints="Contraseña"
         android:id="@+id/editTextTextPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:autofillHints="Contraseña"
         android:backgroundTint="@color/underline_gray"
         android:ems="10"
         android:hint="@string/password"
@@ -112,16 +111,16 @@
         android:id="@+id/button3"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:autoSizeMaxTextSize="100dp"
+        android:autoSizeMinTextSize="1dp"
+        android:autoSizeTextType="uniform"
         android:backgroundTint="@color/medio_gradiente"
         android:text="@string/iniciar_sesion"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="1dp"
-        android:autoSizeMaxTextSize="100dp"
-        app:layout_constraintDimensionRatio="3:1"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
+        app:layout_constraintDimensionRatio="3:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
@@ -168,8 +167,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline9"
-        app:layout_constraintVertical_bias="0.5"
-        />
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"
