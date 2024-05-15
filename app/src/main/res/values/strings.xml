@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TPO</string>
+    <string name="visibilidadpassword">VisibilidadPassword</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="continuar_con_google">Continuar con Google</string>
+    <string name="iniciar_sesion">Iniciar sesion</string>
+    <string name="bienvenido_n_a_la_app">Bienvenido \n a la app</string>
+    <string name="email">Email</string>
+    <string name="pantalla_de_carga">Pantalla de carga</string>
+    <string name="password">Password</string>
+</resources>
