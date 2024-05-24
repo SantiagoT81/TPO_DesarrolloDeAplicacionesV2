@@ -26,6 +26,7 @@
         android:backgroundTint="@color/underline_gray"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
+        android:textColor="#FFFFFF"
         android:textColorHint="@color/gray"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
@@ -43,6 +44,7 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:textColor="#FFFFFF"
         android:textColorHint="@color/gray"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
@@ -58,7 +60,7 @@
         android:autoSizeMaxTextSize="1000dp"
         android:autoSizeMinTextSize="10dp"
         android:autoSizeTextType="uniform"
-        android:text="@string/bienvenido_n_a_la_app"
+        android:text="Bienvenido \n a la app"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="34sp"
@@ -107,41 +109,38 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.2278339" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/button3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:autoSizeMaxTextSize="100dp"
-        android:autoSizeMinTextSize="1dp"
-        android:autoSizeTextType="uniform"
-        android:backgroundTint="@color/medio_gradiente"
+        android:layout_width="138dp"
+        android:layout_height="48dp"
+        android:background="@drawable/gradient"
         android:text="@string/iniciar_sesion"
+        android:textAllCaps="false"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintDimensionRatio="3:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.583" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.59" />
+        app:layout_constraintGuide_percent="0.63" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtRegistrarse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="1000dp"
-        android:autoSizeMinTextSize="10sp"
-        android:autoSizeTextType="uniform"
         android:text="@string/registrarse"
         android:textColor="@color/white"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toStartOf="@+id/guideline11"
@@ -164,23 +163,46 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline10"
         app:layout_constraintDimensionRatio="5:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.218"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline9"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.483" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.66" />
+        app:layout_constraintGuide_percent="0.78" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="195dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="196dp"
+        android:layout_marginBottom="16dp"
+        android:text="-O-"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

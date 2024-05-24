@@ -2,8 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="inicio_gradiente">#1F93B6</color>
-    <color name="medio_gradiente">#197895</color>
+    <color name="inicio_gradiente">#2fcdda</color>
+    <color name="medio_gradiente">#219ec5</color>
     <color name="final_gradiente">#0E4150</color>
     <color name="gray">#ACACAC</color>
     <color name="underline_gray">#D9D9D9</color>
