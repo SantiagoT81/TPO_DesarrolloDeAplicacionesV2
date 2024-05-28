@@ -67,10 +67,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline8"
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_bias="0.0"
 
         />
 
@@ -107,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2278339" />
+        app:layout_constraintGuide_percent="0.19" />
 
     <android.widget.Button
         android:id="@+id/btnLogin"
@@ -160,13 +160,14 @@
         android:text="@string/continuar_con_google"
         android:textSize="20sp"
 
+        app:icon="@drawable/google"
         app:layout_constraintBottom_toTopOf="@+id/guideline10"
         app:layout_constraintDimensionRatio="5:1"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintHorizontal_bias="0.218"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline9"
-        app:layout_constraintVertical_bias="0.483" />
+        app:layout_constraintVertical_bias="0.458" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"

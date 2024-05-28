@@ -6,11 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ar.edu.uade.c12024.tpo.R
+import ar.edu.uade.c12024.tpo.UI.RecyclerViewPaisesGeneral.PaisGeneralAdapter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     //TODO() RecyclerView de paises y Adapter
+    private lateinit var rvPaises: RecyclerView
+    private lateinit var adapter: PaisGeneralAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,10 +26,14 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        rvPaises = findViewById(R.id.rvBanderas)
+        rvPaises.layoutManager = GridLayoutManager(this,3)
+        adapter = PaisGeneralAdapter()
+        rvPaises.adapter = adapter
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel.paises.observe(this){
+            adapter.update(it)
+        }
         viewModel.init()
-
-
-
     }
 }
