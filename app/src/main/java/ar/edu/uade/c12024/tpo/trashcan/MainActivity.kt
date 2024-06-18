@@ -1,4 +1,4 @@
-package ar.edu.uade.c12024.tpo.UI
+package ar.edu.uade.c12024.tpo.trashcan
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -9,10 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.edu.uade.c12024.tpo.R
+import ar.edu.uade.c12024.tpo.UI.BanderasViewModel
 import ar.edu.uade.c12024.tpo.UI.RecyclerViewPaisesGeneral.PaisGeneralAdapter
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: BanderasViewModel
     //TODO() RecyclerView de paises y Adapter
     private lateinit var rvPaises: RecyclerView
     private lateinit var adapter: PaisGeneralAdapter
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         rvPaises.layoutManager = GridLayoutManager(this,3)
         adapter = PaisGeneralAdapter()
         rvPaises.adapter = adapter
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this)[BanderasViewModel::class.java]
         viewModel.paises.observe(this){
             adapter.update(it)
         }

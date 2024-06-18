@@ -9,14 +9,14 @@ import java.util.concurrent.TimeUnit
 
 class PaisGeneralDataSource {
     companion object {
-        private val API_URL = "http://restcountries.com/v3.1/"
+        private val API_URL = "https://restcountries.com/v3.1/"
         private val api: PaisAPI
         //Inicializar API
         init {
             //Requerido para esta API: Ultimamente se toma un poco más de tiempo para responder, resultando en: "java.net.SocketTimeoutException: Read timed out"
             val client = OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .build()
 
             api = Retrofit.Builder()
