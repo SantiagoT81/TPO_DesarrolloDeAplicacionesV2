@@ -1,0 +1,6 @@
+package ar.edu.uade.c12024.tpo.domain.model
+
+data class Currency (
+    val name: String,
+    val symbol: String
+)

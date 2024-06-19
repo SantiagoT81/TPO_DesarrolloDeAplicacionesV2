@@ -1,10 +1,14 @@
 package ar.edu.uade.c12024.tpo.UI.RecyclerViewPaisesGeneral
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ar.edu.uade.c12024.tpo.R
+import ar.edu.uade.c12024.tpo.UI.DetallesPaisActivity
 import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
 import com.bumptech.glide.Glide
 
@@ -30,7 +34,16 @@ class PaisGeneralAdapter: RecyclerView.Adapter<PaisGeneralViewHolder>() {
             .override(320, 160)
             .centerCrop()
             .into(holder.bandera)
+
+        holder.bandera.setOnClickListener{
+            val intent = Intent(holder.itemView.context, DetallesPaisActivity::class.java).apply {
+                putExtra("name", banderas[position].name.common)
+            }
+            holder.itemView.context.startActivity(intent)
+        }
     }
+
+
 
     fun update(lista: MutableList<PaisGeneral>){
         banderas = lista

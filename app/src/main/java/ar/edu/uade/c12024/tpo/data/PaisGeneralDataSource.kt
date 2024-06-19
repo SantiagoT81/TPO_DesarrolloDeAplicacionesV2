@@ -1,6 +1,11 @@
 package ar.edu.uade.c12024.tpo.data
 
 import android.util.Log
+import ar.edu.uade.c12024.tpo.domain.model.CoatOfArms
+import ar.edu.uade.c12024.tpo.domain.model.Flags
+import ar.edu.uade.c12024.tpo.domain.model.Idd
+import ar.edu.uade.c12024.tpo.domain.model.Name
+import ar.edu.uade.c12024.tpo.domain.model.PaisDetalles
 import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -43,6 +48,28 @@ class PaisGeneralDataSource {
                 ArrayList<PaisGeneral>()
             }
         }
+
+        suspend fun getPais(name: String): PaisDetalles? {
+            Log.d("API", "getPais() llamado")
+            Log.d("API", name)
+
+            try {
+                val result = api.getPais(name).execute()
+
+                if (result.isSuccessful) {
+                    Log.d("API", "getPais(): EXITO")
+                    val paisesDetalles = result.body() ?: return null
+                    return paisesDetalles.firstOrNull()
+                } else {
+                    Log.e("API", "getPais(): ERROR - ${result.code()}")
+                    return null
+                }
+            } catch (e: Exception) {
+                Log.e("API", "getPais(): Exception - ${e.message}")
+                return null
+            }
+        }
+
 
     }
 }
