@@ -1,6 +1,7 @@
 package ar.edu.uade.c12024.tpo.UI
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ar.edu.uade.c12024.tpo.R
 import ar.edu.uade.c12024.tpo.R.*
 import ar.edu.uade.c12024.tpo.UI.RecyclerViewPaisesGeneral.PaisGeneralAdapter
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +28,7 @@ private const val ARG_PARAM2 = "param2"
 class BanderasFragment : Fragment() {
     private lateinit var viewModel: BanderasViewModel
     private lateinit var adapter: PaisGeneralAdapter
+    private lateinit var firebaseAuth: FirebaseAuth
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -50,6 +53,9 @@ class BanderasFragment : Fragment() {
         adapter = PaisGeneralAdapter()
         rvPaises.adapter = adapter
 
+        firebaseAuth = FirebaseAuth.getInstance()
+        checkUser()
+
         viewModel = ViewModelProvider(requireActivity())[BanderasViewModel::class.java]
         viewModel.paises.observe(viewLifecycleOwner) {
             adapter.update(it)
@@ -57,6 +63,14 @@ class BanderasFragment : Fragment() {
         viewModel.init()
 
         return view
+    }
+
+    private fun checkUser(){
+        val firebaseUser = firebaseAuth.currentUser
+        if (firebaseUser == null){
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            activity?.finish()
+        }
     }
 
     companion object {
