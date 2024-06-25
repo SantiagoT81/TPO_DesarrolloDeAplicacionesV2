@@ -6,16 +6,23 @@ import ar.edu.uade.c12024.tpo.domain.model.Flags
 import ar.edu.uade.c12024.tpo.domain.model.Idd
 import ar.edu.uade.c12024.tpo.domain.model.Name
 import ar.edu.uade.c12024.tpo.domain.model.PaisDetalles
+import ar.edu.uade.c12024.tpo.domain.model.PaisFavorito
 import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
+import ar.edu.uade.c12024.tpo.domain.model.Usuario
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.suspendCoroutine
 
 class PaisGeneralDataSource {
     companion object {
         private val API_URL = "https://restcountries.com/v3.1/"
         private val api: PaisAPI
+        private val db = FirebaseFirestore.getInstance()
+        private val COLECCION_USUARIOS = "Usuarios"
         //Inicializar API
         init {
             //Requerido para esta API: Ultimamente se toma un poco más de tiempo para responder, resultando en: "java.net.SocketTimeoutException: Read timed out"
@@ -69,6 +76,47 @@ class PaisGeneralDataSource {
                 return null
             }
         }
+
+        suspend fun getFavs(userId: String): List<Any>? {
+            Log.d("API", "FIREBASE: FAVORITOS LLAMADO")
+
+            try {
+                val favoritos = db.collection(COLECCION_USUARIOS).document(userId).get().await()
+
+                if (favoritos.exists()) {
+                    val usuario = favoritos.toObject(Usuario::class.java)
+
+                    return usuario?.favoritos ?: emptyList()
+                } else {
+                    return emptyList()
+                }
+            } catch (e: Exception) {
+                Log.e("API", "Error al obtener favoritos: $e")
+                return null
+            }
+        }
+
+        suspend fun getPaisGeneralFavorito(name: String): ArrayList<PaisGeneral>{
+            Log.d("API", "getPaisGeneralFavorito() llamado" )
+            val api = Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(PaisAPI::class.java)
+
+            var result = api.getPaisGeneral(name).execute()
+
+            return if(result.isSuccessful){
+                Log.d("API", "getPaises(): EXITO")
+                result.body() ?: ArrayList<PaisGeneral>()
+            }else{
+                Log.e("API", "getPaises(): ERROR")
+                ArrayList<PaisGeneral>()
+            }
+        }
+
+        //Remover favorito
+
+        //Agregar favorito
 
 
     }

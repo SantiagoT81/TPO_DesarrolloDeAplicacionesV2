@@ -4,8 +4,6 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ar.edu.uade.c12024.tpo.R
 import ar.edu.uade.c12024.tpo.UI.DetallesPaisActivity
@@ -44,9 +42,9 @@ class PaisGeneralAdapter: RecyclerView.Adapter<PaisGeneralViewHolder>() {
     }
 
 
-
-    fun update(lista: MutableList<PaisGeneral>){
-        banderas = lista
+    //actualizar array con favoritos
+    fun update(lista: List<Any>){
+        banderas = lista as MutableList<PaisGeneral>
         this.notifyDataSetChanged()
     }
 }

@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ar.edu.uade.c12024.tpo.R
+import ar.edu.uade.c12024.tpo.UI.RecyclerViewPaisesGeneral.PaisGeneralAdapter
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,6 +23,9 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class FavoritosFragment : Fragment() {
+    private lateinit var viewModel: FavoritosViewModel
+    private lateinit var adapter: PaisGeneralAdapter
+    private lateinit var firebaseAuth: FirebaseAuth
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -35,7 +43,20 @@ class FavoritosFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favoritos, container, false)
+        val view = inflater.inflate(R.layout.fragment_favoritos, container, false)
+
+        val rvFavs: RecyclerView = view.findViewById(R.id.rvFavoritos)
+        rvFavs.layoutManager = GridLayoutManager(requireContext(), 3)
+        adapter = PaisGeneralAdapter()
+        rvFavs.adapter = adapter
+
+        viewModel = ViewModelProvider(requireActivity())[FavoritosViewModel::class.java]
+        viewModel.paises.observe(viewLifecycleOwner){
+            adapter.update(it)
+        }
+        viewModel.init()
+
+        return view
     }
 
     companion object {

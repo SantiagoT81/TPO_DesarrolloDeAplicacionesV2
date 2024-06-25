@@ -15,4 +15,7 @@ interface PaisAPI {
 
     @GET("name/{name}")
     fun getPais(@Path("name") code: String): Call<ArrayList<PaisDetalles>>
+
+    @GET("name/{name}?fields=name,flags")
+    fun getPaisGeneral(@Path("name") code: String): Call<ArrayList<PaisGeneral>>
 }
