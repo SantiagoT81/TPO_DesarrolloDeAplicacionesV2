@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -27,6 +28,8 @@ class DetallesPaisActivity : AppCompatActivity() {
     lateinit var zonaHoraria: TextView
     lateinit var prefijo: TextView
 
+    lateinit var botonFavorito: ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,7 +41,6 @@ class DetallesPaisActivity : AppCompatActivity() {
         }
         vm = ViewModelProvider(this)[DetallesPaisViewModel::class.java]
 
-        //finds
         pais = findViewById(R.id.txtNombrePais)
         region = findViewById(R.id.txtRegion)
         capital = findViewById(R.id.txtCapital)
@@ -49,17 +51,21 @@ class DetallesPaisActivity : AppCompatActivity() {
         emblema = findViewById(R.id.imgHeraldica)
         pb = findViewById(R.id.pbProgreso)
 
+        botonFavorito = findViewById(R.id.imgFavorito)
+
+
         val name = intent.getStringExtra("name")!!
 
         vm.pais.observe(this) {
-            // Update UI fields with country data
             pais.text = it.name.common
             region.text = it.region
             capital.text = it.capital.firstOrNull() ?: "N/A"
             divisa.text = it.currencies.values.firstOrNull()?.name ?: "N/A"
             zonaHoraria.text = it.timezones.firstOrNull() ?: "N/A"
             prefijo.text = "${it.idd.root}${it.idd.suffixes.firstOrNull() ?: ""}"
-
+            botonFavorito.setOnClickListener {
+                vm.agregarRemoverFavorito(name)
+            }
             pb.visibility = View.INVISIBLE
 
             Glide.with(this)
@@ -74,5 +80,21 @@ class DetallesPaisActivity : AppCompatActivity() {
         }
         pb.visibility = View.VISIBLE
         vm.init(name)
+
+        vm.agregado.observe(this) {agregado ->
+            if(agregado){
+                Toast.makeText(this, "Agregado a favoritos", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(this, "Error al agregar el favorito", Toast.LENGTH_SHORT).show()
+            }
+        }
+        vm.borrado.observe(this){borrado ->
+            if(borrado){
+                Toast.makeText(this, "Eliminado de favoritos", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Toast.makeText(this, "Error al eliminar el favorito", Toast.LENGTH_SHORT).show()
+
+        }
     }
-}
+}}

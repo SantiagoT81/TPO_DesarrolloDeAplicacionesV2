@@ -9,6 +9,7 @@ import ar.edu.uade.c12024.tpo.domain.model.PaisDetalles
 import ar.edu.uade.c12024.tpo.domain.model.PaisFavorito
 import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
 import ar.edu.uade.c12024.tpo.domain.model.Usuario
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import okhttp3.OkHttpClient
@@ -114,10 +115,47 @@ class PaisGeneralDataSource {
             }
         }
 
+        suspend fun existePaisFavorito(idPais: String, userId: String): Boolean{
+            val usuario = db.collection(COLECCION_USUARIOS).document(userId).get().await()
+
+            if(usuario.exists()){
+                val favorito = usuario.get("favoritos") as? List<String>
+                return favorito?.contains(idPais) == true
+            }
+            return false;
+
+        }
+
         //Remover favorito
 
         //Agregar favorito
+        suspend fun addFavorite(idPais: String, userId: String): Boolean {
+            Log.d("API", "FIREBASE: AGREGAR A FAVORITOS LLAMADO")
+            val usuario = db.collection(COLECCION_USUARIOS).document(userId)
 
+            try{
+                usuario.update("favoritos", FieldValue.arrayUnion(idPais)).await()
+                return true
+
+            }catch (e: Exception){
+                Log.e("API", "FIREBASE: ERROR AL AGREGAR A FAVORITOS: $e")
+                return false
+            }
+
+        }
+
+        suspend fun removeFavorite(idPais: String, userId: String): Boolean {
+            Log.d("API", "FIREBASE: REMOVER DE FAVORITOS LLAMADO")
+            val usuario = db.collection(COLECCION_USUARIOS).document(userId)
+
+            try{
+                usuario.update("favoritos", FieldValue.arrayRemove(idPais)).await()
+                return true
+            }catch (e: Exception){
+                Log.e("API", "FIREBASE: ERROR AL REMOVER DE FAVORITOS: $e")
+                return false
+            }
+        }
 
     }
 }

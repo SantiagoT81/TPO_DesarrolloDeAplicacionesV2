@@ -16,12 +16,12 @@ class FavoritosViewModel: ViewModel() {
     var paises: MutableLiveData<List<Any>> = MutableLiveData<List<Any>>()
     val firebaseAuth = FirebaseAuth.getInstance()
     val currentUser = firebaseAuth.currentUser
+    val USER = currentUser!!.uid
 
     private val coroutineContext: CoroutineContext = newSingleThreadContext("countries")
     private val scope = CoroutineScope(coroutineContext)
 
     fun init (){
-        if(paises.value.isNullOrEmpty()){
             scope.launch {
                 Log.d("API", currentUser!!.uid)
                 val userId = currentUser!!.uid
@@ -38,7 +38,34 @@ class FavoritosViewModel: ViewModel() {
 
             }
 
+
+
+    }
+
+
+    fun eliminarPais(idPais: String){
+        val listaActual = paises.value?.toMutableList() ?: mutableListOf()
+        val paisEliminado = listaActual.find { it.toString() == idPais }
+        if (paisEliminado != null) {
+            listaActual.remove(paisEliminado)
+
         }
 
     }
+    private val coroutineContext2: CoroutineContext = newSingleThreadContext("actualizar")
+    private val scope2 = CoroutineScope(coroutineContext2)
+    fun update(){
+        scope2.launch {
+            try{
+                val ids = paisRepo.getFavs(USER) ?: emptyList()
+                Log.d("API", ids.toString())
+            }catch (e: Exception){
+                Log.e("API", e.toString())
+            }
+        }
+        paises.postValue(paises.value)
+
+    }
+
+
 }

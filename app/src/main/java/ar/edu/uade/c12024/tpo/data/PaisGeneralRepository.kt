@@ -20,4 +20,16 @@ class PaisGeneralRepository {
     suspend fun getPaisGeneralFavorito(name: String): ArrayList<PaisGeneral> {
         return PaisGeneralDataSource.Companion.getPaisGeneralFavorito(name)
     }
+
+    suspend fun addFavorite(idPais: String, userId: String): Boolean{
+        return PaisGeneralDataSource.Companion.addFavorite(idPais, userId)
+    }
+
+    suspend fun removeFavorite(idPais: String, userId: String): Boolean{
+        return PaisGeneralDataSource.Companion.removeFavorite(idPais, userId)
+    }
+
+    suspend fun existePaisFavorito(idPais: String, userId: String): Boolean{
+        return PaisGeneralDataSource.Companion.existePaisFavorito(idPais, userId)
+    }
 }

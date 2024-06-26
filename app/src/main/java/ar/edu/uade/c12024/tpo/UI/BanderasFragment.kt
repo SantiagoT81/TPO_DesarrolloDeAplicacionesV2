@@ -3,15 +3,15 @@ package ar.edu.uade.c12024.tpo.UI
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.edu.uade.c12024.tpo.R
-import ar.edu.uade.c12024.tpo.R.*
+import ar.edu.uade.c12024.tpo.R.layout
 import ar.edu.uade.c12024.tpo.UI.RecyclerViewPaisesGeneral.PaisGeneralAdapter
 import com.google.firebase.auth.FirebaseAuth
 
@@ -62,8 +62,17 @@ class BanderasFragment : Fragment() {
         }
         viewModel.init()
 
+        //viewModel.agregado.observe(viewLifecycleOwner) {agregado ->
+         //   if(agregado){
+         //       Toast.makeText(requireContext(), "Favorito agregado exitosamente", Toast.LENGTH_SHORT).show()
+         //   }else{
+        //        Toast.makeText(requireContext(), "Error al agregar el favorito", Toast.LENGTH_SHORT).show()
+         //   }
+        //}
+
         return view
     }
+
 
     private fun checkUser(){
         val firebaseUser = firebaseAuth.currentUser

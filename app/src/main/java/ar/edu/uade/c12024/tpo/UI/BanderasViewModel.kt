@@ -32,6 +32,5 @@ class BanderasViewModel: ViewModel() {
                 }
             }
         }
-
     }
 }
