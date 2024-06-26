@@ -1,7 +1,6 @@
 package ar.edu.uade.c12024.tpo.UI.RecyclerViewPaisesGeneral
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +24,7 @@ class PaisGeneralAdapter: RecyclerView.Adapter<PaisGeneralViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: PaisGeneralViewHolder, position: Int) {
-        Log.d("VISTA_BANDERAS", "Position: $position")
+        //Log.d("VISTA_BANDERAS", "Position: $position")
         holder.nombre.text = banderas[position].name.common
         Glide.with(holder.itemView.context)
             .load(banderas[position].flags.png)

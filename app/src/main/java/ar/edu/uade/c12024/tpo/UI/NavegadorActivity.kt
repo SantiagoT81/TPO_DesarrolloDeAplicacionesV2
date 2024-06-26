@@ -9,7 +9,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import ar.edu.uade.c12024.tpo.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 
 class NavegadorActivity : AppCompatActivity() {
 
@@ -23,6 +22,7 @@ class NavegadorActivity : AppCompatActivity() {
             insets
         }
 
+        //bind único
         val navegadorView = findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
 
         navegadorView.setOnNavigationItemSelectedListener { item ->

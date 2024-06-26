@@ -1,7 +1,6 @@
 package ar.edu.uade.c12024.tpo.UI
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -41,6 +40,16 @@ class DetallesPaisActivity : AppCompatActivity() {
         }
         vm = ViewModelProvider(this)[DetallesPaisViewModel::class.java]
 
+
+        bind()
+        pb.visibility = View.VISIBLE
+
+        val name = intent.getStringExtra("name")!!
+        vm.init(name)
+        observe()
+
+}
+    private fun bind(){
         pais = findViewById(R.id.txtNombrePais)
         region = findViewById(R.id.txtRegion)
         capital = findViewById(R.id.txtCapital)
@@ -52,11 +61,11 @@ class DetallesPaisActivity : AppCompatActivity() {
         pb = findViewById(R.id.pbProgreso)
 
         botonFavorito = findViewById(R.id.imgFavorito)
+    }
 
-
-        val name = intent.getStringExtra("name")!!
-
+    private fun observe(){
         vm.pais.observe(this) {
+            val name = intent.getStringExtra("name")!!
             pais.text = it.name.common
             region.text = it.region
             capital.text = it.capital.firstOrNull() ?: "N/A"
@@ -78,8 +87,6 @@ class DetallesPaisActivity : AppCompatActivity() {
                 .override(76, 68)
                 .into(emblema)
         }
-        pb.visibility = View.VISIBLE
-        vm.init(name)
 
         vm.agregado.observe(this) {agregado ->
             if(agregado){
@@ -95,6 +102,7 @@ class DetallesPaisActivity : AppCompatActivity() {
             else{
                 Toast.makeText(this, "Error al eliminar el favorito", Toast.LENGTH_SHORT).show()
 
+            }
         }
     }
-}}
+}

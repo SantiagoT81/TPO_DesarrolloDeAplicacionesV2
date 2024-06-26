@@ -47,7 +47,7 @@ class BanderasFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(layout.fragment_banderas, container, false)
-
+        //bind único
         val rvPaises: RecyclerView = view.findViewById(R.id.rvFlags)
         rvPaises.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = PaisGeneralAdapter()
@@ -57,18 +57,12 @@ class BanderasFragment : Fragment() {
         checkUser()
 
         viewModel = ViewModelProvider(requireActivity())[BanderasViewModel::class.java]
+
+        //observe único
         viewModel.paises.observe(viewLifecycleOwner) {
             adapter.update(it)
         }
         viewModel.init()
-
-        //viewModel.agregado.observe(viewLifecycleOwner) {agregado ->
-         //   if(agregado){
-         //       Toast.makeText(requireContext(), "Favorito agregado exitosamente", Toast.LENGTH_SHORT).show()
-         //   }else{
-        //        Toast.makeText(requireContext(), "Error al agregar el favorito", Toast.LENGTH_SHORT).show()
-         //   }
-        //}
 
         return view
     }
@@ -102,35 +96,3 @@ class BanderasFragment : Fragment() {
             }
     }
 }
-
-/*
-class BanderasFragment : Fragment() {
-
-    private lateinit var viewModel: MainViewModel
-    private lateinit var adapter: PaisGeneralAdapter
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_banderas, container, false)
-
-        val rvPaises: RecyclerView = view.findViewById(R.id.rvBanderas)
-        rvPaises.layoutManager = GridLayoutManager(requireContext(), 3)
-        adapter = PaisGeneralAdapter()
-        rvPaises.adapter = adapter
-
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
-        viewModel.paises.observe(viewLifecycleOwner) {
-            adapter.update(it)
-        }
-        viewModel.init()
-
-        return view
-    }
-}
-
-
-
-
- */

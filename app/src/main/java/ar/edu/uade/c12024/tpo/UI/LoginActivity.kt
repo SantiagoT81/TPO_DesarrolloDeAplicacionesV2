@@ -27,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var email: EditText
     private lateinit var password: EditText
+    private lateinit var login: Button
     //------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +39,8 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        iniciarGoogle = findViewById(R.id.btnLoginGoogle)
-        registrarse = findViewById(R.id.txtRegistrarse)
+        bind()
+
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             //checkear strings.xml por la clave de API web de firebase
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -49,38 +50,9 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
         firebaseAuth = FirebaseAuth.getInstance()
 
-        registrarse.setOnClickListener {
-            val intent = Intent(this, SignupActivity::class.java)
-            startActivity(intent)
-        }
-        email = findViewById(R.id.txtEmail)
-        password = findViewById(R.id.txtPassword)
-        //LOGIN
-        val login: Button = findViewById(R.id.btnLogin)
-        login.setOnClickListener {
-            //val intent = Intent(this, NavegadorActivity::class.java)
-            //startActivity(intent)
-            val correo = email.text.toString()
-            val contrasenia = password.text.toString()
+        setListeners()
 
-            if(correo.isNotEmpty() && contrasenia.isNotEmpty()){
-                firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener{
-                    if(it.isSuccessful){
-                        val intent = Intent(this, NavegadorActivity::class.java)
-                        startActivity(intent)
-                    }else{
-                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                    }
-            }else{
-                Toast.makeText(this, "Ingresar correo y contraseña", Toast.LENGTH_SHORT).show()
-            }
-        }
 
-        iniciarGoogle.setOnClickListener{
-            val intent = googleSignInClient.signInIntent
-            startActivityForResult(intent, 100)
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -117,6 +89,49 @@ class LoginActivity : AppCompatActivity() {
             .addOnFailureListener{e ->
                 Toast.makeText(this@LoginActivity, "Login fallido... ", Toast.LENGTH_LONG).show()
             }
+    }
+
+    private fun bind(){
+        iniciarGoogle = findViewById(R.id.btnLoginGoogle)
+        registrarse = findViewById(R.id.txtRegistrarse)
+        email = findViewById(R.id.txtEmail)
+        password = findViewById(R.id.txtPassword)
+        login = findViewById(R.id.btnLogin)
+    }
+
+    private fun setListeners(){
+        //LOGIN
+        login.setOnClickListener {
+            //val intent = Intent(this, NavegadorActivity::class.java)
+            //startActivity(intent)
+            val correo = email.text.toString()
+            val contrasenia = password.text.toString()
+
+            if(correo.isNotEmpty() && contrasenia.isNotEmpty()){
+                firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener{
+                    if(it.isSuccessful){
+                        val intent = Intent(this, NavegadorActivity::class.java)
+                        startActivity(intent)
+                    }else{
+                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }else{
+                Toast.makeText(this, "Ingresar correo y contraseña", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        registrarse.setOnClickListener {
+            val intent = Intent(this, SignupActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+        iniciarGoogle.setOnClickListener{
+            val intent = googleSignInClient.signInIntent
+            startActivityForResult(intent, 100)
+        }
     }
 
 

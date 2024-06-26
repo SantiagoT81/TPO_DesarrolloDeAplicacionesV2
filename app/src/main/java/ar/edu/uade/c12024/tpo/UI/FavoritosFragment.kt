@@ -46,12 +46,15 @@ class FavoritosFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_favoritos, container, false)
 
+        //bind único
         val rvFavs: RecyclerView = view.findViewById(R.id.rvFavoritos)
         rvFavs.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = PaisGeneralAdapter()
         rvFavs.adapter = adapter
 
         viewModel = ViewModelProvider(requireActivity())[FavoritosViewModel::class.java]
+
+        //observe único
         viewModel.paises.observe(viewLifecycleOwner){
             adapter.update(it)
         }
