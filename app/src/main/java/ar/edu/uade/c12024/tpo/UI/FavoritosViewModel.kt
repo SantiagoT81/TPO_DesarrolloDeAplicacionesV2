@@ -31,6 +31,7 @@ class FavoritosViewModel: ViewModel() {
 
                 for (id in ids){
                     val paisArray = paisRepo.getPaisGeneralFavorito(id.toString())
+                    //Devuelve un array con un único país.
                     val pais = paisArray[0]
                     listaFavoritos.add(pais)
                 }

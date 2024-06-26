@@ -32,7 +32,7 @@ class PaisGeneralDataSource {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(PaisAPI::class.java)
         }
-
+        //Obtener todos los países con solo su ID e imagen.
         suspend fun getPaises(): ArrayList<PaisGeneral>{
             Log.d("API", "getPaises() llamado" )
             val api = Retrofit.Builder()
@@ -50,7 +50,7 @@ class PaisGeneralDataSource {
                 ArrayList<PaisGeneral>()
             }
         }
-
+        //Obtener un país por su nombre y con detalles.
         suspend fun getPais(name: String): PaisDetalles? {
             Log.d("API", "getPais() llamado")
             Log.d("API", name)
@@ -71,7 +71,7 @@ class PaisGeneralDataSource {
                 return null
             }
         }
-
+        //Obtener todos los países favoritos del usuario almacenado en Firestore.
         suspend fun getFavs(userId: String): List<Any>? {
             Log.d("API", "FIREBASE: FAVORITOS LLAMADO")
 
@@ -90,7 +90,7 @@ class PaisGeneralDataSource {
                 return null
             }
         }
-
+        //Obtener un país general por su nombre para obtener sus detalles generales (ID y bandera)
         suspend fun getPaisGeneralFavorito(name: String): ArrayList<PaisGeneral>{
             Log.d("API", "getPaisGeneralFavorito() llamado" )
             val api = Retrofit.Builder()
@@ -108,7 +108,7 @@ class PaisGeneralDataSource {
                 ArrayList<PaisGeneral>()
             }
         }
-
+        //Devuelve True si el país con el ID dado existe en Firestore, o False en caso contrario.
         suspend fun existePaisFavorito(idPais: String, userId: String): Boolean{
 
             val usuario = db.collection(COLECCION_USUARIOS).document(userId).get().await()
@@ -117,14 +117,14 @@ class PaisGeneralDataSource {
                 val favorito = usuario.get("favoritos") as? List<String>
                 return favorito?.contains(idPais) == true
             }
-            val newUserData = hashMapOf(
+            val nuevaLista = hashMapOf(
                 "favoritos" to listOf<String>()
             )
-            db.collection(COLECCION_USUARIOS).document(userId).set(newUserData).await()
+            db.collection(COLECCION_USUARIOS).document(userId).set(nuevaLista).await()
             return false;
 
         }
-
+        //Agregar un país a favoritos en Firestore.
         suspend fun addFavorite(idPais: String, userId: String): Boolean {
             Log.d("API", "FIREBASE: AGREGAR A FAVORITOS LLAMADO")
             val usuario = db.collection(COLECCION_USUARIOS).document(userId)
@@ -139,7 +139,7 @@ class PaisGeneralDataSource {
             }
 
         }
-
+        //Eliminar un país de favoritos en Firestore.
         suspend fun removeFavorite(idPais: String, userId: String): Boolean {
             Log.d("API", "FIREBASE: REMOVER DE FAVORITOS LLAMADO")
             val usuario = db.collection(COLECCION_USUARIOS).document(userId)
