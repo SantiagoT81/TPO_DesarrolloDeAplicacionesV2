@@ -20,7 +20,7 @@ class PaisGeneralAdapter: RecyclerView.Adapter<PaisGeneralViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        Log.d("VISTA_BANDERAS", "Size: ${banderas.size}")
+        //Log.d("VISTA_BANDERAS", "Size: ${banderas.size}")
         return banderas.size
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import ar.edu.uade.c12024.tpo.R
-import ar.edu.uade.c12024.tpo.trashcan.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,6 +25,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var iniciarGoogle: Button
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var email: EditText
+    private lateinit var password: EditText
     //------------
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,11 +53,28 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
         }
-
+        email = findViewById(R.id.txtEmail)
+        password = findViewById(R.id.txtPassword)
+        //LOGIN
         val login: Button = findViewById(R.id.btnLogin)
         login.setOnClickListener {
-            val intent = Intent(this, NavegadorActivity::class.java)
-            startActivity(intent)
+            //val intent = Intent(this, NavegadorActivity::class.java)
+            //startActivity(intent)
+            val correo = email.text.toString()
+            val contrasenia = password.text.toString()
+
+            if(correo.isNotEmpty() && contrasenia.isNotEmpty()){
+                firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener{
+                    if(it.isSuccessful){
+                        val intent = Intent(this, NavegadorActivity::class.java)
+                        startActivity(intent)
+                    }else{
+                        Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                    }
+            }else{
+                Toast.makeText(this, "Ingresar correo y contraseña", Toast.LENGTH_SHORT).show()
+            }
         }
 
         iniciarGoogle.setOnClickListener{
@@ -99,6 +118,8 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, "Login fallido... ", Toast.LENGTH_LONG).show()
             }
     }
+
+
 
 
 }

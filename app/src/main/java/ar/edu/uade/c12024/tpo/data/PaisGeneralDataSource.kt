@@ -1,12 +1,7 @@
 package ar.edu.uade.c12024.tpo.data
 
 import android.util.Log
-import ar.edu.uade.c12024.tpo.domain.model.CoatOfArms
-import ar.edu.uade.c12024.tpo.domain.model.Flags
-import ar.edu.uade.c12024.tpo.domain.model.Idd
-import ar.edu.uade.c12024.tpo.domain.model.Name
 import ar.edu.uade.c12024.tpo.domain.model.PaisDetalles
-import ar.edu.uade.c12024.tpo.domain.model.PaisFavorito
 import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
 import ar.edu.uade.c12024.tpo.domain.model.Usuario
 import com.google.firebase.firestore.FieldValue
@@ -16,7 +11,6 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.suspendCoroutine
 
 class PaisGeneralDataSource {
     companion object {
@@ -116,19 +110,21 @@ class PaisGeneralDataSource {
         }
 
         suspend fun existePaisFavorito(idPais: String, userId: String): Boolean{
+
             val usuario = db.collection(COLECCION_USUARIOS).document(userId).get().await()
 
             if(usuario.exists()){
                 val favorito = usuario.get("favoritos") as? List<String>
                 return favorito?.contains(idPais) == true
             }
+            val newUserData = hashMapOf(
+                "favoritos" to listOf<String>()
+            )
+            db.collection(COLECCION_USUARIOS).document(userId).set(newUserData).await()
             return false;
 
         }
 
-        //Remover favorito
-
-        //Agregar favorito
         suspend fun addFavorite(idPais: String, userId: String): Boolean {
             Log.d("API", "FIREBASE: AGREGAR A FAVORITOS LLAMADO")
             val usuario = db.collection(COLECCION_USUARIOS).document(userId)
