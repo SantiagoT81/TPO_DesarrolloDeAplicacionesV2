@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -70,14 +71,18 @@ class BanderasFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[BanderasViewModel::class.java]
 
         //observe único
-        viewModel.paises.observe(viewLifecycleOwner) {
-            adapter.update(it)
-        }
+        viewModel.listaFiltrada.observe(viewLifecycleOwner, Observer {
+            lista -> adapter.update(lista)
+        })
+        //adapter.update(it)
+
         viewModel.init()
 
         botonOrdenar.setOnClickListener {
             ordenar()
         }
+
+        configurarSearchView(searchView)
 
         //COLOR SEARCHVIEW
         val id = searchView.context.resources.getIdentifier("android:id/search_src_text", null, null)
@@ -104,24 +109,38 @@ class BanderasFragment : Fragment() {
         }
         adapter.ordenar(comparador)
     }
+    //Listener para que se actualice la lista filtrada según el string que esté en el SearchView
+    private fun configurarSearchView(searchView: SearchView) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            //No hace el filtrado al presionar enter, sino por cada cambio de texto en el campo.
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(texto: String?): Boolean {
+                viewModel.filtrarLista(texto)
+                return true
+            }
+        })
+    }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BanderasFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BanderasFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment BanderasFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    @JvmStatic
+    fun newInstance(param1: String, param2: String) =
+        BanderasFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
             }
-    }
+        }
+}
 }

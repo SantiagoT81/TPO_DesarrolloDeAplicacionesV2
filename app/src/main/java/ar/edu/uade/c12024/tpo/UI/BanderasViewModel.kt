@@ -14,6 +14,8 @@ class BanderasViewModel: ViewModel() {
     var paisRepo: PaisGeneralRepository = PaisGeneralRepository()
     var paises: MutableLiveData<ArrayList<PaisGeneral>> = MutableLiveData<ArrayList<PaisGeneral>>()
 
+
+    val listaFiltrada : MutableLiveData<ArrayList<PaisGeneral>> = MutableLiveData<ArrayList<PaisGeneral>>()
     private val coroutineContext: CoroutineContext = newSingleThreadContext("countries")
     private val scope = CoroutineScope(coroutineContext)
 
@@ -25,12 +27,24 @@ class BanderasViewModel: ViewModel() {
                 }.onSuccess {
                     Log.d("API", "VISTA GENERAL DE PAISES: EXITO")
                     paises.postValue(it)
+                    listaFiltrada.postValue(it)
                     Log.d("API", "PAISES: $it")
                 }.onFailure {
                     Log.e("API", "VISTA GENERAL DE PAISES: ERROR: $it")
                     paises.postValue(ArrayList<PaisGeneral>())
                 }
             }
+        }
+    }
+
+    fun filtrarLista(query: String?){
+        val original = paises.value ?: return
+        listaFiltrada.value = if (query.isNullOrEmpty()){
+            original
+        }else{
+            original.filter {
+                it.name.common.contains(query, true)
+            } as ArrayList<PaisGeneral>
         }
     }
 }
