@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnOrdenar"
         android:layout_width="124dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
@@ -72,12 +72,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <SearchView
+        android:id="@+id/scvBusqueda"
         android:layout_width="174dp"
         android:layout_height="30dp"
-        android:queryHint="Argentina..."
 
         app:layout_constraintBottom_toTopOf="@+id/guideline18"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/btnOrdenar"
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="@+id/guideline21"
         app:layout_constraintTop_toBottomOf="@+id/textView6"

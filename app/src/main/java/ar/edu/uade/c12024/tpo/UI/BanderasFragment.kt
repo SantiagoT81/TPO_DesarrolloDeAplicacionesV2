@@ -2,10 +2,15 @@ package ar.edu.uade.c12024.tpo.UI
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ar.edu.uade.c12024.tpo.R
 import ar.edu.uade.c12024.tpo.R.layout
 import ar.edu.uade.c12024.tpo.UI.RecyclerViewPaisesGeneral.PaisGeneralAdapter
+import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
 import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
@@ -29,6 +35,8 @@ class BanderasFragment : Fragment() {
     private lateinit var viewModel: BanderasViewModel
     private lateinit var adapter: PaisGeneralAdapter
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var botonOrdenar: Button
+    private lateinit var searchView: SearchView
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -49,6 +57,9 @@ class BanderasFragment : Fragment() {
         val view = inflater.inflate(layout.fragment_banderas, container, false)
         //bind único
         val rvPaises: RecyclerView = view.findViewById(R.id.rvFlags)
+        botonOrdenar = view.findViewById(R.id.btnOrdenar)
+        searchView = view.findViewById(R.id.scvBusqueda)
+
         rvPaises.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = PaisGeneralAdapter()
         rvPaises.adapter = adapter
@@ -64,6 +75,17 @@ class BanderasFragment : Fragment() {
         }
         viewModel.init()
 
+        botonOrdenar.setOnClickListener {
+            ordenar()
+        }
+
+        //COLOR SEARCHVIEW
+        val id = searchView.context.resources.getIdentifier("android:id/search_src_text", null, null)
+        val texto = searchView.findViewById<EditText>(id)
+        texto.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+        texto.setHintTextColor(Color.GRAY)
+        texto.setHint("Argentina...")
+
         return view
     }
 
@@ -74,6 +96,13 @@ class BanderasFragment : Fragment() {
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             activity?.finish()
         }
+    }
+
+    private fun ordenar(){
+        val comparador = Comparator<PaisGeneral>{o1,o2 ->
+            o1.name.toString().compareTo(o2.name.toString())
+        }
+        adapter.ordenar(comparador)
     }
 
     companion object {

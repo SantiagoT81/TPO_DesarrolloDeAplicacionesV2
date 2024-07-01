@@ -46,4 +46,9 @@ class PaisGeneralAdapter: RecyclerView.Adapter<PaisGeneralViewHolder>() {
         banderas = lista as MutableList<PaisGeneral>
         this.notifyDataSetChanged()
     }
+
+    fun ordenar(comparador: Comparator<PaisGeneral>){
+        banderas.sortWith(comparador)
+        notifyDataSetChanged()
+    }
 }
