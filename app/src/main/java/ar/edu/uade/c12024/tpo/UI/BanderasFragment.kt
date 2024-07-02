@@ -1,5 +1,6 @@
 package ar.edu.uade.c12024.tpo.UI
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -38,6 +40,7 @@ class BanderasFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var botonOrdenar: Button
     private lateinit var searchView: SearchView
+    private lateinit var progressBar: ProgressBar
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -60,6 +63,11 @@ class BanderasFragment : Fragment() {
         val rvPaises: RecyclerView = view.findViewById(R.id.rvFlags)
         botonOrdenar = view.findViewById(R.id.btnOrdenar)
         searchView = view.findViewById(R.id.scvBusqueda)
+        progressBar = view.findViewById(R.id.pbCargar)
+        progressBar.visibility = View.VISIBLE
+        val animator = ObjectAnimator.ofInt(progressBar, "progress", 0, 100)
+        animator.duration = 1000
+        animator.start()
 
         rvPaises.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = PaisGeneralAdapter()
@@ -72,7 +80,8 @@ class BanderasFragment : Fragment() {
 
         //observe único
         viewModel.listaFiltrada.observe(viewLifecycleOwner, Observer {
-            lista -> adapter.update(lista)
+                lista -> adapter.update(lista)
+            progressBar.visibility = View.INVISIBLE
         })
         //adapter.update(it)
 
@@ -125,22 +134,22 @@ class BanderasFragment : Fragment() {
     }
 
     companion object {
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BanderasFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    @JvmStatic
-    fun newInstance(param1: String, param2: String) =
-        BanderasFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_PARAM1, param1)
-                putString(ARG_PARAM2, param2)
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment BanderasFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            BanderasFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
             }
-        }
-}
+    }
 }

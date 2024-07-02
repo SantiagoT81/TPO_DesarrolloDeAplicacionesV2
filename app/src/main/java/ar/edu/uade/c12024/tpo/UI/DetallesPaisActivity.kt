@@ -1,5 +1,6 @@
 package ar.edu.uade.c12024.tpo.UI
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -43,6 +44,9 @@ class DetallesPaisActivity : AppCompatActivity() {
 
         bind()
         pb.visibility = View.VISIBLE
+        val animator = ObjectAnimator.ofInt(pb, "progress", 0, 100)
+        animator.duration = 1000
+        animator.start()
 
         val name = intent.getStringExtra("name")!!
         vm.init(name)
