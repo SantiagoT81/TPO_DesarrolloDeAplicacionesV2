@@ -1,6 +1,12 @@
 package ar.edu.uade.c12024.tpo.data
 
+import android.content.Context
 import android.util.Log
+import ar.edu.uade.c12024.tpo.data.dbLocal.AppDatabase
+import ar.edu.uade.c12024.tpo.data.dbLocal.PaisDetallesLocal
+import ar.edu.uade.c12024.tpo.data.dbLocal.toPaisDetalles
+import ar.edu.uade.c12024.tpo.data.dbLocal.toPaisDetallesList
+import ar.edu.uade.c12024.tpo.data.dbLocal.toPaisDetallesLocal
 import ar.edu.uade.c12024.tpo.domain.model.PaisDetalles
 import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
 import ar.edu.uade.c12024.tpo.domain.model.Usuario
@@ -51,16 +57,44 @@ class PaisGeneralDataSource {
             }
         }
         //Obtener un país por su nombre y con detalles.
-        suspend fun getPais(name: String): PaisDetalles? {
+        suspend fun getPais(name: String, context: Context): PaisDetalles? {
             Log.d("API", "getPais() llamado")
             Log.d("API", name)
 
             try {
+                var db = AppDatabase.getInstance(context)
+                var paisLocal = db.paisesDetallesDao().getByPK(name)
+                if(paisLocal != null){
+                    Log.d("API", "getPais(): BUSCADO LOCAL")
+                    return paisLocal.toPaisDetalles()
+                }
+
                 val result = api.getPais(name).execute()
 
                 if (result.isSuccessful) {
                     Log.d("API", "getPais(): EXITO")
+                    Log.d("API", "Buscando en API")
                     val paisesDetalles = result.body() ?: return null
+                    /*
+                    val paisDetallesLocal = PaisDetallesLocal(
+                        id = paisesDetalles[0].name.common,  // Usa name.common como clave primaria
+                        flags = paisesDetalles[0].flags,
+                        name = paisesDetalles[0].name,
+                        currencies = paisesDetalles[0].currencies,
+                        capital = paisesDetalles[0].capital,
+                        region = paisesDetalles[0].region,
+                        subregion = paisesDetalles[0].subregion,
+                        languages = paisesDetalles[0].languages,
+                        borders = paisesDetalles[0].borders,
+                        population = paisesDetalles[0].population,
+                        timezones = paisesDetalles[0].timezones,
+                        coatOfArms = paisesDetalles[0].coatOfArms,
+                        idd = paisesDetalles[0].idd,
+                        cca3 = paisesDetalles[0].cca3
+                    )
+                */
+                    db.paisesDetallesDao().insert(paisesDetalles[0].toPaisDetallesLocal(paisesDetalles[0].name.common))
+
                     return paisesDetalles.firstOrNull()
                 } else {
                     Log.e("API", "getPais(): ERROR - ${result.code()}")

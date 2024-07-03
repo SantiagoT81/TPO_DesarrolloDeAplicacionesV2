@@ -1,5 +1,6 @@
 package ar.edu.uade.c12024.tpo.data
 
+import android.content.Context
 import ar.edu.uade.c12024.tpo.domain.model.PaisDetalles
 import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
 import ar.edu.uade.c12024.tpo.domain.model.Usuario
@@ -9,8 +10,8 @@ class PaisGeneralRepository {
         return PaisGeneralDataSource.Companion.getPaises()
     }
 
-    suspend fun getPais(name: String): PaisDetalles?{
-        return PaisGeneralDataSource.Companion.getPais(name)
+    suspend fun getPais(name: String, context: Context): PaisDetalles?{
+        return PaisGeneralDataSource.Companion.getPais(name, context)
     }
 
     suspend fun getFavs(userId: String): List<Any>?{

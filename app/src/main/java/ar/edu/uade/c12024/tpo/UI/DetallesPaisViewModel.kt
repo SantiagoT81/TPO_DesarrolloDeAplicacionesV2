@@ -1,5 +1,6 @@
 package ar.edu.uade.c12024.tpo.UI
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,10 +25,10 @@ class DetallesPaisViewModel: ViewModel() {
     private val scope = CoroutineScope(coroutineContext)
     private val viewModel: FavoritosViewModel = FavoritosViewModel()
 
-    fun init(name: String){
+    fun init(name: String, context: Context){
         scope.launch {
             kotlin.runCatching {
-                paisRepo.getPais(name)
+                paisRepo.getPais(name, context)
             }.onSuccess {
                 pais.postValue(it ?: PaisDetalles())
             }.onFailure {

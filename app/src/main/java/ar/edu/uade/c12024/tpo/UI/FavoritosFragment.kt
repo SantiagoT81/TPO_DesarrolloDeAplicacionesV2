@@ -1,10 +1,12 @@
 package ar.edu.uade.c12024.tpo.UI
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
 class FavoritosFragment : Fragment() {
     private lateinit var viewModel: FavoritosViewModel
     private lateinit var adapter: PaisGeneralAdapter
-    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var pbFav: ProgressBar
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -48,27 +50,36 @@ class FavoritosFragment : Fragment() {
 
         //bind único
         val rvFavs: RecyclerView = view.findViewById(R.id.rvFavoritos)
+        pbFav = view.findViewById(R.id.pbFavoritos)
+        pbFav.visibility = View.VISIBLE
+        val animator = ObjectAnimator.ofInt(pbFav, "progress", 0, 100)
+        animator.duration = 1000
+        animator.start()
+
+
         rvFavs.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = PaisGeneralAdapter()
         rvFavs.adapter = adapter
+
 
         viewModel = ViewModelProvider(requireActivity())[FavoritosViewModel::class.java]
 
         //observe único
         viewModel.paises.observe(viewLifecycleOwner){
             adapter.update(it)
+            pbFav.visibility = View.INVISIBLE
         }
+
         viewModel.init()
 
         return view
     }
 
     override fun onResume() {
+        pbFav.visibility = View.VISIBLE
         super.onResume()
         Log.d("API", "Volviendo a la pantalla")
         viewModel.init()
-
-
     }
 
     companion object {

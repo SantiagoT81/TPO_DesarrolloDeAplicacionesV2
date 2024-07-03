@@ -49,7 +49,7 @@ class DetallesPaisActivity : AppCompatActivity() {
         animator.start()
 
         val name = intent.getStringExtra("name")!!
-        vm.init(name)
+        vm.init(name, this)
         observe()
 
 }
