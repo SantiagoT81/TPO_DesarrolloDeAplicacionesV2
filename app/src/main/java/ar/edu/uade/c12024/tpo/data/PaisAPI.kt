@@ -11,8 +11,6 @@ interface PaisAPI {
     @GET("all?fields=name,flags")
     fun getPaises(): Call<ArrayList<PaisGeneral>>
 
-    //TODO: Obtener los detalles de un poís a partir de su nombre (GET).
-
     //Obtener detalles de un único país.
     @GET("name/{name}")
     fun getPais(@Path("name") code: String): Call<ArrayList<PaisDetalles>>

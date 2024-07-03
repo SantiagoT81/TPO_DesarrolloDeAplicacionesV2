@@ -59,20 +59,24 @@ class BanderasFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(layout.fragment_banderas, container, false)
-        //bind único
+        //BINDS
         val rvPaises: RecyclerView = view.findViewById(R.id.rvFlags)
         botonOrdenar = view.findViewById(R.id.btnOrdenar)
         searchView = view.findViewById(R.id.scvBusqueda)
         progressBar = view.findViewById(R.id.pbCargar)
         progressBar.visibility = View.VISIBLE
+
+        //ANIMACIÓN PB
         val animator = ObjectAnimator.ofInt(progressBar, "progress", 0, 100)
         animator.duration = 1000
         animator.start()
 
+        //Banderas en filas de 3
         rvPaises.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = PaisGeneralAdapter()
         rvPaises.adapter = adapter
 
+        //AUTENTICACIÓN
         firebaseAuth = FirebaseAuth.getInstance()
         checkUser()
 
@@ -83,35 +87,31 @@ class BanderasFragment : Fragment() {
                 lista -> adapter.update(lista)
             progressBar.visibility = View.INVISIBLE
         })
-        //adapter.update(it)
 
         viewModel.init()
 
+        //LISTENERS
         botonOrdenar.setOnClickListener {
             ordenar()
         }
 
+        //Aplica cambios al SearchView
         configurarSearchView(searchView)
-
-        //COLOR SEARCHVIEW
-        val id = searchView.context.resources.getIdentifier("android:id/search_src_text", null, null)
-        val texto = searchView.findViewById<EditText>(id)
-        texto.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
-        texto.setHintTextColor(Color.GRAY)
-        texto.setHint("Argentina...")
 
         return view
     }
 
-
+    //Verifica si existe un usuario en Firebase
     private fun checkUser(){
         val firebaseUser = firebaseAuth.currentUser
+        //Si no existe, se redirige al login
         if (firebaseUser == null){
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             activity?.finish()
         }
     }
 
+    //Ordena los elementos del array de paises en base a un comparador (en este caso, el nombre de cada país)
     private fun ordenar(){
         val comparador = Comparator<PaisGeneral>{o1,o2 ->
             o1.name.toString().compareTo(o2.name.toString())
@@ -121,7 +121,7 @@ class BanderasFragment : Fragment() {
     //Listener para que se actualice la lista filtrada según el string que esté en el SearchView
     private fun configurarSearchView(searchView: SearchView) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            //No hace el filtrado al presionar enter, sino por cada cambio de texto en el campo.
+            //No hace el filtrado al presionar enter, sino por cada cambio de texto en el campo
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -131,6 +131,13 @@ class BanderasFragment : Fragment() {
                 return true
             }
         })
+
+        //COLOR DEL SEARCHVIEW
+        val id = searchView.context.resources.getIdentifier("android:id/search_src_text", null, null)
+        val texto = searchView.findViewById<EditText>(id)
+        texto.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+        texto.setHintTextColor(Color.GRAY)
+        texto.setHint("Argentina...")
     }
 
     companion object {

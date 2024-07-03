@@ -56,7 +56,6 @@ class FavoritosFragment : Fragment() {
         animator.duration = 1000
         animator.start()
 
-
         rvFavs.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = PaisGeneralAdapter()
         rvFavs.adapter = adapter
@@ -68,6 +67,7 @@ class FavoritosFragment : Fragment() {
         viewModel.paises.observe(viewLifecycleOwner){
             adapter.update(it)
             pbFav.visibility = View.INVISIBLE
+
         }
 
         viewModel.init()

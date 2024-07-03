@@ -25,10 +25,14 @@ class FavoritosViewModel: ViewModel() {
             scope.launch {
                 Log.d("API", currentUser!!.uid)
                 val userId = currentUser!!.uid
+
+                //Array de strings con las IDs de cada país favorito del usuario
                 val ids = paisRepo.getFavs(userId) ?: emptyList()
 
                 val listaFavoritos: MutableList<PaisGeneral> = mutableListOf()
 
+                //Por cada ID de país favorito, se realiza una llamada individual a la API.
+                //Dicha llamada trae un único país dentro de un array
                 for (id in ids){
                     val paisArray = paisRepo.getPaisGeneralFavorito(id.toString())
                     //Devuelve un array con un único país.
@@ -38,35 +42,8 @@ class FavoritosViewModel: ViewModel() {
                 paises.postValue(listaFavoritos)
 
             }
-
-
-
     }
 
-
-    fun eliminarPais(idPais: String){
-        val listaActual = paises.value?.toMutableList() ?: mutableListOf()
-        val paisEliminado = listaActual.find { it.toString() == idPais }
-        if (paisEliminado != null) {
-            listaActual.remove(paisEliminado)
-
-        }
-
-    }
-    private val coroutineContext2: CoroutineContext = newSingleThreadContext("actualizar")
-    private val scope2 = CoroutineScope(coroutineContext2)
-    fun update(){
-        scope2.launch {
-            try{
-                val ids = paisRepo.getFavs(USER) ?: emptyList()
-                Log.d("API", ids.toString())
-            }catch (e: Exception){
-                Log.e("API", e.toString())
-            }
-        }
-        paises.postValue(paises.value)
-
-    }
-
+    //Se elimina
 
 }

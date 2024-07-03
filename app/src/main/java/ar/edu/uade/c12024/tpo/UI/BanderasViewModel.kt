@@ -20,28 +20,37 @@ class BanderasViewModel: ViewModel() {
     private val scope = CoroutineScope(coroutineContext)
 
     fun init (){
+        //Único llamado al inicio (paises está vacío)
         if(paises.value.isNullOrEmpty()){
             scope.launch {
                 kotlin.runCatching {
                     paisRepo.getPaises()
                 }.onSuccess {
-                    Log.d("API", "VISTA GENERAL DE PAISES: EXITO")
+                    //Si fue exitoso, se carga la lista en 2 lugares: la de países y la de los mismos pero filtrada
+                    Log.d("API", "CARGA DE PAÍSES GENERALES: EXITO")
                     paises.postValue(it)
+                    //La lista filtrada es, en un inicio, igual a la lista de países
                     listaFiltrada.postValue(it)
                     Log.d("API", "PAISES: $it")
                 }.onFailure {
-                    Log.e("API", "VISTA GENERAL DE PAISES: ERROR: $it")
+                    //Caso contrario ambas variables reciben una lista vacia
+                    Log.e("API", "CARGA DE PAÍSES GENERALES: ERROR: $it")
                     paises.postValue(ArrayList<PaisGeneral>())
+                    listaFiltrada.postValue(ArrayList<PaisGeneral>())
                 }
             }
         }
     }
 
+    //Filtrado de la lista filtrada observada a partir del nombre de un país.
+    //La búsqueda trae aproximaciones (es decir, si se busca "ua" muestra "Paraguay", "Guatemala", etc)
     fun filtrarLista(query: String?){
         val original = paises.value ?: return
+        //Si la lista filtrada está vacía, no se realizan cambios.
         listaFiltrada.value = if (query.isNullOrEmpty()){
             original
         }else{
+            //Caso contrario se filtra la lista original en base al nombre común pasado como argumento
             original.filter {
                 it.name.common.contains(query, true)
             } as ArrayList<PaisGeneral>

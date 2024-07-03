@@ -32,6 +32,7 @@ class PaisGeneralAdapter: RecyclerView.Adapter<PaisGeneralViewHolder>() {
             .centerCrop()
             .into(holder.bandera)
 
+        //Listener en la imagen de cada bandera para redireccionar a los detalles de dicho país
         holder.bandera.setOnClickListener{
             val intent = Intent(holder.itemView.context, DetallesPaisActivity::class.java).apply {
                 putExtra("name", banderas[position].name.common)
@@ -41,12 +42,13 @@ class PaisGeneralAdapter: RecyclerView.Adapter<PaisGeneralViewHolder>() {
     }
 
 
-    //actualizar array con favoritos
+    //Actualizar array con favoritos
     fun update(lista: List<Any>){
         banderas = lista as MutableList<PaisGeneral>
         this.notifyDataSetChanged()
     }
 
+    //Ordenamiento de banderas en base al nombre (descendente)
     fun ordenar(comparador: Comparator<PaisGeneral>){
         banderas.sortWith(comparador)
         notifyDataSetChanged()

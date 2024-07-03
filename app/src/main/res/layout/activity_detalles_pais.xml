@@ -49,9 +49,8 @@
             android:id="@+id/imgFavorito"
             android:layout_width="58dp"
             android:layout_height="45dp"
-            android:layout_marginEnd="17dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline38"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@android:drawable/btn_star_big_off" />
 
@@ -67,7 +66,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="182dp" />
+            app:layout_constraintGuide_percent="0.43825665" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.96125907" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView

@@ -43,6 +43,8 @@ class DetallesPaisActivity : AppCompatActivity() {
 
 
         bind()
+
+        //PROGRESS BAR
         pb.visibility = View.VISIBLE
         val animator = ObjectAnimator.ofInt(pb, "progress", 0, 100)
         animator.duration = 1000
@@ -81,31 +83,30 @@ class DetallesPaisActivity : AppCompatActivity() {
             }
             pb.visibility = View.INVISIBLE
 
+            //BANDERA
             Glide.with(this)
                 .load(it.flags.png)
                 .override(302, 171)
                 .into(imagen)
 
+            //EMBLEMA
             Glide.with(this)
                 .load(it.coatOfArms.png)
                 .override(76, 68)
                 .into(emblema)
         }
-
+        //Se observan ambas variables para llevar rastro de cuando se elimina o agrega a favoritos, y así mostrar un toast
+        //Se reinicia una vez se sale de un detalle
         vm.agregado.observe(this) {agregado ->
             if(agregado){
                 Toast.makeText(this, "Agregado a favoritos", Toast.LENGTH_SHORT).show()
-            }else{
-                Toast.makeText(this, "Error al agregar el favorito", Toast.LENGTH_SHORT).show()
+                botonFavorito.setImageResource(android.R.drawable.star_big_on)
             }
         }
         vm.borrado.observe(this){borrado ->
             if(borrado){
                 Toast.makeText(this, "Eliminado de favoritos", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                Toast.makeText(this, "Error al eliminar el favorito", Toast.LENGTH_SHORT).show()
-
+                botonFavorito.setImageResource(android.R.drawable.star_big_off)
             }
         }
     }

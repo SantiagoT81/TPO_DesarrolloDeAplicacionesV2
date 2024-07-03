@@ -59,13 +59,13 @@ class PaisGeneralDataSource {
         //Obtener un país por su nombre y con detalles.
         suspend fun getPais(name: String, context: Context): PaisDetalles? {
             Log.d("API", "getPais() llamado")
-            Log.d("API", name)
+            Log.d("API", "Nombre del pais: $name")
 
             try {
                 var db = AppDatabase.getInstance(context)
                 var paisLocal = db.paisesDetallesDao().getByPK(name)
                 if(paisLocal != null){
-                    Log.d("API", "getPais(): BUSCADO LOCAL")
+                    Log.d("API", "getPais(): $name BUSCADO LOCAL")
                     return paisLocal.toPaisDetalles()
                 }
 
@@ -73,7 +73,7 @@ class PaisGeneralDataSource {
 
                 if (result.isSuccessful) {
                     Log.d("API", "getPais(): EXITO")
-                    Log.d("API", "Buscando en API")
+                    Log.d("API", "$name BUSCADO EN API")
                     val paisesDetalles = result.body() ?: return null
                     /*
                     val paisDetallesLocal = PaisDetallesLocal(

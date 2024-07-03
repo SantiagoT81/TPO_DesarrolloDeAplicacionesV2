@@ -28,6 +28,7 @@ class DetallesPaisViewModel: ViewModel() {
     fun init(name: String, context: Context){
         scope.launch {
             kotlin.runCatching {
+                //Búsqueda de un único país por API
                 paisRepo.getPais(name, context)
             }.onSuccess {
                 pais.postValue(it ?: PaisDetalles())
@@ -53,11 +54,14 @@ class DetallesPaisViewModel: ViewModel() {
                 //Si fue de borrado
                 if(existePaisFavorito){
                     Log.d("API", "REMOVER FAVORITO: EXITO")
-                    viewModel.eliminarPais(idPais)
+                    borrado.postValue(true)
+                    agregado.postValue(false)
+
                     //Si fue de agregado
                 }else{
                     Log.d("API", "AGREGAR FAVORITO: EXITO")
                     agregado.postValue(true)
+                    borrado.postValue(false)
                 }
             }.onFailure {
                 if(existePaisFavorito){
