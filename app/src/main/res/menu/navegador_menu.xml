@@ -11,7 +11,7 @@
         android:title="Favoritos" />
 
     <item
-        android:id="@+id/navegador_buscador"
+        android:id="@+id/navegador_usuario"
         android:icon="@drawable/outline_account_circle_24"
         android:title="Buscador" />
 </menu>

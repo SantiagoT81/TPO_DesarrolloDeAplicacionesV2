@@ -71,6 +71,7 @@ class BanderasFragment : Fragment() {
         animator.duration = 1000
         animator.start()
 
+
         //Banderas en filas de 3
         rvPaises.layoutManager = GridLayoutManager(requireContext(), 3)
         adapter = PaisGeneralAdapter()

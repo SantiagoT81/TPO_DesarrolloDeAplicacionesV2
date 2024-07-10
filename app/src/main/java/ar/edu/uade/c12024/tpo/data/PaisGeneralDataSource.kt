@@ -3,9 +3,7 @@ package ar.edu.uade.c12024.tpo.data
 import android.content.Context
 import android.util.Log
 import ar.edu.uade.c12024.tpo.data.dbLocal.AppDatabase
-import ar.edu.uade.c12024.tpo.data.dbLocal.PaisDetallesLocal
 import ar.edu.uade.c12024.tpo.data.dbLocal.toPaisDetalles
-import ar.edu.uade.c12024.tpo.data.dbLocal.toPaisDetallesList
 import ar.edu.uade.c12024.tpo.data.dbLocal.toPaisDetallesLocal
 import ar.edu.uade.c12024.tpo.domain.model.PaisDetalles
 import ar.edu.uade.c12024.tpo.domain.model.PaisGeneral
@@ -20,51 +18,50 @@ import java.util.concurrent.TimeUnit
 
 class PaisGeneralDataSource {
     companion object {
-        private val API_URL = "https://restcountries.com/v3.1/"
+        private const val API_URL = "https://restcountries.com/v3.1/"
         private val api: PaisAPI
         private val db = FirebaseFirestore.getInstance()
-        private val COLECCION_USUARIOS = "Usuarios"
-        //Inicializar API
+        private const val COLECCION_USUARIOS = "Usuarios"
+
         init {
-            //Requerido para esta API: Ultimamente se toma un poco más de tiempo para responder, resultando en: "java.net.SocketTimeoutException: Read timed out"
+            // Inicializar API: Ultimamente se toma un poco más de tiempo para responder
             val client = OkHttpClient.Builder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .build()
 
-            api = Retrofit.Builder()
+            val retrofit = Retrofit.Builder()
                 .baseUrl(API_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build().create(PaisAPI::class.java)
+                .build()
+
+            api = retrofit.create(PaisAPI::class.java)
         }
-        //Obtener todos los países con solo su ID e imagen.
-        suspend fun getPaises(): ArrayList<PaisGeneral>{
-            Log.d("API", "getPaises() llamado" )
-            val api = Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(PaisAPI::class.java)
 
-            var result = api.getPaises().execute()
+        // Obtener todos los países con solo su ID e imagen.
+        suspend fun getPaises(): ArrayList<PaisGeneral> {
+            Log.d("API", "getPaises() llamado")
+            val result = api.getPaises().execute()
 
-            return if(result.isSuccessful){
+            return if (result.isSuccessful) {
                 Log.d("API", "getPaises(): EXITO")
-                result.body() ?: ArrayList<PaisGeneral>()
-            }else{
+                result.body() ?: ArrayList()
+            } else {
                 Log.e("API", "getPaises(): ERROR")
-                ArrayList<PaisGeneral>()
+                ArrayList()
             }
         }
-        //Obtener un país por su nombre y con detalles.
+
+        // Obtener un país por su nombre y con detalles.
         suspend fun getPais(name: String, context: Context): PaisDetalles? {
             Log.d("API", "getPais() llamado")
             Log.d("API", "Nombre del pais: $name")
 
             try {
-                var db = AppDatabase.getInstance(context)
-                var paisLocal = db.paisesDetallesDao().getByPK(name)
-                if(paisLocal != null){
+                val db = AppDatabase.getInstance(context)
+                val paisLocal = db.paisesDetallesDao().getByPK(name)
+                if (paisLocal != null) {
                     Log.d("API", "getPais(): $name BUSCADO LOCAL")
                     return paisLocal.toPaisDetalles()
                 }
@@ -72,27 +69,12 @@ class PaisGeneralDataSource {
                 val result = api.getPais(name).execute()
 
                 if (result.isSuccessful) {
+                    // No se encontró local, se guarda en Room y se llama a la API.
                     Log.d("API", "getPais(): EXITO")
                     Log.d("API", "$name BUSCADO EN API")
                     val paisesDetalles = result.body() ?: return null
-                    /*
-                    val paisDetallesLocal = PaisDetallesLocal(
-                        id = paisesDetalles[0].name.common,  // Usa name.common como clave primaria
-                        flags = paisesDetalles[0].flags,
-                        name = paisesDetalles[0].name,
-                        currencies = paisesDetalles[0].currencies,
-                        capital = paisesDetalles[0].capital,
-                        region = paisesDetalles[0].region,
-                        subregion = paisesDetalles[0].subregion,
-                        languages = paisesDetalles[0].languages,
-                        borders = paisesDetalles[0].borders,
-                        population = paisesDetalles[0].population,
-                        timezones = paisesDetalles[0].timezones,
-                        coatOfArms = paisesDetalles[0].coatOfArms,
-                        idd = paisesDetalles[0].idd,
-                        cca3 = paisesDetalles[0].cca3
-                    )
-                */
+
+                    //name.common es el id que actúa como PK localmente
                     db.paisesDetallesDao().insert(paisesDetalles[0].toPaisDetallesLocal(paisesDetalles[0].name.common))
 
                     return paisesDetalles.firstOrNull()
@@ -105,7 +87,8 @@ class PaisGeneralDataSource {
                 return null
             }
         }
-        //Obtener todos los países favoritos del usuario almacenado en Firestore.
+
+        // Obtener todos los países favoritos del usuario almacenado en Firestore.
         suspend fun getFavs(userId: String): List<Any>? {
             Log.d("API", "FIREBASE: FAVORITOS LLAMADO")
 
@@ -124,30 +107,26 @@ class PaisGeneralDataSource {
                 return null
             }
         }
-        //Obtener un país general por su nombre para obtener sus detalles generales (ID y bandera)
-        suspend fun getPaisGeneralFavorito(name: String): ArrayList<PaisGeneral>{
-            Log.d("API", "getPaisGeneralFavorito() llamado" )
-            val api = Retrofit.Builder()
-                .baseUrl(API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(PaisAPI::class.java)
 
-            var result = api.getPaisGeneral(name).execute()
+        // Obtener un país general por su nombre para obtener sus detalles generales (ID y bandera)
+        suspend fun getPaisGeneralFavorito(name: String): ArrayList<PaisGeneral> {
+            Log.d("API", "getPaisGeneralFavorito() llamado")
+            val result = api.getPaisGeneral(name).execute()
 
-            return if(result.isSuccessful){
+            return if (result.isSuccessful) {
                 Log.d("API", "getPaises(): EXITO")
-                result.body() ?: ArrayList<PaisGeneral>()
-            }else{
+                result.body() ?: ArrayList()
+            } else {
                 Log.e("API", "getPaises(): ERROR")
-                ArrayList<PaisGeneral>()
+                ArrayList()
             }
         }
-        //Devuelve True si el país con el ID dado existe en Firestore, o False en caso contrario.
-        suspend fun existePaisFavorito(idPais: String, userId: String): Boolean{
 
+        // Devuelve True si el país con el ID dado existe en Firestore, o False en caso contrario.
+        suspend fun existePaisFavorito(idPais: String, userId: String): Boolean {
             val usuario = db.collection(COLECCION_USUARIOS).document(userId).get().await()
 
-            if(usuario.exists()){
+            if (usuario.exists()) {
                 val favorito = usuario.get("favoritos") as? List<String>
                 return favorito?.contains(idPais) == true
             }
@@ -155,37 +134,36 @@ class PaisGeneralDataSource {
                 "favoritos" to listOf<String>()
             )
             db.collection(COLECCION_USUARIOS).document(userId).set(nuevaLista).await()
-            return false;
-
+            return false
         }
-        //Agregar un país a favoritos en Firestore.
+
+        // Agregar un país a favoritos en Firestore.
         suspend fun addFavorite(idPais: String, userId: String): Boolean {
             Log.d("API", "FIREBASE: AGREGAR A FAVORITOS LLAMADO")
             val usuario = db.collection(COLECCION_USUARIOS).document(userId)
 
-            try{
+            try {
                 usuario.update("favoritos", FieldValue.arrayUnion(idPais)).await()
                 return true
 
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Log.e("API", "FIREBASE: ERROR AL AGREGAR A FAVORITOS: $e")
                 return false
             }
-
         }
-        //Eliminar un país de favoritos en Firestore.
+
+        // Eliminar un país de favoritos en Firestore.
         suspend fun removeFavorite(idPais: String, userId: String): Boolean {
             Log.d("API", "FIREBASE: REMOVER DE FAVORITOS LLAMADO")
             val usuario = db.collection(COLECCION_USUARIOS).document(userId)
 
-            try{
+            try {
                 usuario.update("favoritos", FieldValue.arrayRemove(idPais)).await()
                 return true
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Log.e("API", "FIREBASE: ERROR AL REMOVER DE FAVORITOS: $e")
                 return false
             }
         }
-
     }
 }

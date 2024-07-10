@@ -30,6 +30,7 @@ class NavegadorActivity : AppCompatActivity() {
             when (item.itemId){
                 R.id.navegador_banderas -> fragmento = BanderasFragment()
                 R.id.navegador_favoritos -> fragmento = FavoritosFragment()
+                R.id.navegador_usuario -> fragmento = UsuarioFragment()
             }
             if(fragmento != null){
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragmento).commit()

@@ -42,6 +42,9 @@ class SignupActivity : AppCompatActivity() {
                             registroFallidoFragment.show(supportFragmentManager, "RegistroFallidoDialog")
                         }
                 }
+                else{
+                    registroFallidoFragment.show(supportFragmentManager, "RegistroFallidoDialog")
+                }
             }
             //AGREGAR PARÁMETRO PARA CAMBIAR EL TEXTO DEL FRAGMENTO FALLIDO (1: Error por email ya registrado o 2: Campos vacíos/inválidos)
             else{

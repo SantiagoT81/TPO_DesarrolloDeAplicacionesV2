@@ -26,8 +26,6 @@ class RegistroFallidoFragment : BottomSheetDialogFragment() {
 
         btnOk.setOnClickListener {
             Toast.makeText(requireContext(), LocalDateTime.now().toString(), Toast.LENGTH_SHORT).show()
-            var intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            dismiss()
         }
     }}

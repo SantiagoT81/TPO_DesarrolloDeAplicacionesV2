@@ -48,9 +48,10 @@ class BanderasViewModel: ViewModel() {
         val original = paises.value ?: return
         //Si la lista filtrada está vacía, no se realizan cambios.
         listaFiltrada.value = if (query.isNullOrEmpty()){
+            //Consulta vacía, lista filtrada toma el valor de la original
             original
         }else{
-            //Caso contrario se filtra la lista original en base al nombre común pasado como argumento
+            //Caso contrario toma el valor de la lista original filtrada en base al nombre común pasado como argumento
             original.filter {
                 it.name.common.contains(query, true)
             } as ArrayList<PaisGeneral>
